@@ -2,10 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// serve frontend static files from "public" folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -15,33 +19,33 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
 });
 
-// health check route
-app.get('/', (req, res) => res.send('Library Assistant API running'));
+// health
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-// get all books
-app.get('/books', async (req, res) => {
+// get books
+app.get('/api/books', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM books ORDER BY id');
     res.json(result.rows);
   } catch (err) {
-    console.error('GET /books error:', err);
+    console.error('GET /api/books error:', err);
     res.status(500).json({ error: 'Database error' });
   }
 });
 
-// get all book requests
-app.get('/requests', async (req, res) => {
+// get all book requests (for dashboard)
+app.get('/api/requests', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM book_requests ORDER BY requested_on DESC');
     res.json(result.rows);
   } catch (err) {
-    console.error('GET /requests error:', err);
+    console.error('GET /api/requests error:', err);
     res.status(500).json({ error: 'Database error' });
   }
 });
 
-// create a new request
-app.post('/requests', async (req, res) => {
+// create a new request (student)
+app.post('/api/requests', async (req, res) => {
   const { title, author, requested_by } = req.body;
   try {
     const query = `
@@ -52,15 +56,41 @@ app.post('/requests', async (req, res) => {
     const result = await pool.query(query, [title, author, requested_by]);
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('POST /requests error:', err);
+    console.error('POST /api/requests error:', err);
     res.status(500).json({ error: 'Insert failed' });
   }
 });
 
-// simulate Microsoft Teams messages
-app.post('/teams/message', async (req, res) => {
+// update request status (approve / reject)
+app.patch('/api/requests/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body; // expected 'Approved' or 'Rejected' or 'Pending'
+  if (!['Approved', 'Rejected', 'Pending'].includes(status)) {
+    return res.status(400).json({ error: 'Invalid status' });
+  }
+
+  try {
+    const updateQuery = `
+      UPDATE book_requests
+      SET status = $1
+      WHERE id = $2
+      RETURNING *;
+    `;
+    const result = await pool.query(updateQuery, [status, id]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Request not found' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('PATCH /api/requests/:id error:', err);
+    res.status(500).json({ error: 'Update failed' });
+  }
+});
+
+// simulated Teams message (kept for demo)
+app.post('/api/teams/message', async (req, res) => {
   const { from, message } = req.body;
-  if (!message) return res.json({ reply: 'Please enter a valid message' });
+  if (!message) return res.status(400).json({ reply: 'Please enter a valid message' });
   const lower = message.toLowerCase();
 
   try {
@@ -79,7 +109,7 @@ app.post('/teams/message', async (req, res) => {
 
     return res.json({ reply: 'Unknown command. Try "view books" or "request book <book name>"' });
   } catch (err) {
-    console.error('/teams/message error:', err);
+    console.error('/api/teams/message error:', err);
     res.status(500).json({ reply: 'Server error' });
   }
 });

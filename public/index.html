@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Library Assistant - Librarian Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📚 Librarian Dashboard</h1>
+    <p id="status-msg" class="muted">Fetching requests...</p>
+
+    <table id="requests-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Book Title</th>
+          <th>Requested By</th>
+          <th>Requested On</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="note">
+      Tip: Click <strong>Approve</strong> or <strong>Reject</strong> to update status.
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

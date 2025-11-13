@@ -1,0 +1,12 @@
+:root { font-family: system-ui, Arial, sans-serif; color: #222; }
+body { margin: 20px; background: #f6f8fa; }
+.container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+h1 { margin: 0 0 10px; }
+.muted { color: #666; margin-bottom: 10px; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #fafafa; font-weight: 600; color: #333; }
+button { padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; }
+button.approve { background: #e6ffed; }
+button.reject { background: #ffecec; }
+.note { margin-top: 12px; color: #444; font-size: 0.95rem; }
