@@ -9,9 +9,26 @@
 <body>
   <div class="container">
     <h1>📚 Librarian Dashboard</h1>
+
+    <!-- Controls: status toggle + search + apply/clear -->
+    <div class="controls">
+      <div class="filter-group">
+        <button id="filter-toggle" class="main-btn">Filter ▾</button>
+        <div id="filter-buttons" class="filter-buttons hidden" aria-hidden="true">
+          <button class="filter-btn" data-status="Pending">Pending</button>
+          <button class="filter-btn" data-status="Approved">Approved</button>
+          <button class="filter-btn" data-status="Rejected">Rejected</button>
+        </div>
+      </div>
+
+      <input id="search-box" placeholder="Search by book title or requester" />
+      <button id="apply-filter" class="main-btn">Apply</button>
+      <button id="clear-filter" class="main-btn">Clear</button>
+    </div>
+
     <p id="status-msg" class="muted">Fetching requests...</p>
 
-    <table id="requests-table">
+    <table id="requests-table" aria-label="Book requests table">
       <thead>
         <tr>
           <th>ID</th>
@@ -19,6 +36,7 @@
           <th>Requested By</th>
           <th>Requested On</th>
           <th>Status</th>
+          <th>Copies</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -26,7 +44,7 @@
     </table>
 
     <div class="note">
-      Tip: Click <strong>Approve</strong> or <strong>Reject</strong> to update status.
+      Tip: Use the Filter button to select Pending/Approved/Rejected. Approve is disabled if no copies or request already approved. Buttons are disabled during update to prevent double-clicks.
     </div>
   </div>
 

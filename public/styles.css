@@ -1,12 +1,28 @@
 :root { font-family: system-ui, Arial, sans-serif; color: #222; }
 body { margin: 20px; background: #f6f8fa; }
-.container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+.container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
 h1 { margin: 0 0 10px; }
 .muted { color: #666; margin-bottom: 10px; }
+
+/* controls */
+.controls { margin-top: 10px; margin-bottom: 6px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+#search-box { flex:1; padding:8px; border-radius:6px; border:1px solid #ddd; min-width:200px; }
+.main-btn { padding:8px 10px; border-radius:6px; border:1px solid #ccc; cursor:pointer; background:#fff; }
+.filter-group { position: relative; display:flex; align-items:center; gap:6px; }
+.filter-buttons { position: absolute; top: 38px; left: 0; display:flex; gap:6px; background: #fff; padding: 8px; border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); z-index: 10; }
+.filter-buttons.hidden { display: none; }
+
+/* filter buttons */
+.filter-btn { padding:6px 10px; border-radius:6px; border:1px solid #ccc; cursor:pointer; background:#f8f9fb; }
+.filter-btn:hover { transform: translateY(-1px); }
+
+/* table */
 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; }
+th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; vertical-align: middle; }
 th { background: #fafafa; font-weight: 600; color: #333; }
 button { padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; }
 button.approve { background: #e6ffed; }
 button.reject { background: #ffecec; }
+button[disabled] { opacity: 0.5; cursor: not-allowed; }
 .note { margin-top: 12px; color: #444; font-size: 0.95rem; }
+td.copies { font-weight:600; width:70px; text-align:center; }
